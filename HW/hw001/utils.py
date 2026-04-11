@@ -1,5 +1,14 @@
+import inspect
+
 import numpy as np
 import math as m
+import os.path
+
+from src.engine.scene.Scene import Scene
+from src.engine.model.Polygon import Polygon
+from src.engine.model.Point import SimplePoint
+from src.engine.model.LineModel import LineModel
+
 
 def transformation_relative_to_pivot(transformation_matrix: np.array, pivot: np.array) -> np.array:
     a, b = pivot
@@ -153,3 +162,94 @@ def print_matrices(
     for i, matrix in enumerate(matrices):
         name = names[i] if names is not None else f"M{i + 1}"
         print_matrix(name, matrix, precision)
+
+def draw_polygone_tasks_1_6(square, transformed_square, output_name, coordinate_rect_=(-5, -5, 5, 5)):
+    output_name += ".png"
+
+    scene = Scene(
+        image_size=(7, 7),
+        coordinate_rect=coordinate_rect_,
+        title="Task 008",
+        grid_show=True,
+        base_axis_show=False,
+        axis_show=True,
+        axis_color=("red", "green"),
+        axis_line_style="-.",
+        keep_aspect_ratio=True,
+    )
+
+    original_square = Polygon(
+        square,
+        color="gray",
+        linewidth=2.0,
+        line_style="--",
+        vertices_show=True,
+        vertex_color="gray",
+    )
+
+    scene["original_square"] = original_square
+
+
+
+    final_square = Polygon(
+        transformed_square,
+        color="blue",
+        linewidth=2.5,
+        line_style="solid",
+        vertices_show=True,
+        vertex_color="blue",
+    )
+
+    scene["final_square"] = final_square
+
+    scene.show(output_file=output_name)
+
+def draw_polygone_tasks_7_10(square, transformed_square,pivot = [0,0], output_name="", coordinate_rect_=(-5, -5, 5, 5)):
+    output_name += ".png"
+
+    scene = Scene(
+        image_size=(7, 7),
+        coordinate_rect=coordinate_rect_,
+        title="Task 008",
+        grid_show=True,
+        base_axis_show=False,
+        axis_show=True,
+        axis_color=("red", "green"),
+        axis_line_style="-.",
+        keep_aspect_ratio=True,
+    )
+
+    original_square = Polygon(
+        square,
+        color="gray",
+        linewidth=2.0,
+        line_style="--",
+        vertices_show=True,
+        vertex_color="gray",
+    )
+
+    scene["original_square"] = original_square
+
+    final_square = Polygon(
+        transformed_square,
+        color="blue",
+        linewidth=2.5,
+        line_style="solid",
+        vertices_show=True,
+        vertex_color="blue",
+    )
+
+    pivot_point = SimplePoint(
+        pivot,
+        color="red",
+        vertex_size=80,
+        labels=((f"pivot ({pivot[0]}, {pivot[1]})", (0.08, 0.08)),),
+        label_color="red",
+        label_fontsize=12,
+    )
+
+    scene["pivot"] = pivot_point
+
+    scene["final_square"] = final_square
+
+    scene.show(output_file=output_name)

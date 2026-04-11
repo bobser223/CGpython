@@ -13,5 +13,5 @@ if __name__ == '__main__':
 
     SR = rotation @ scale
     polygone_scaled_rotated = utils.apply_transformation_matrix(SR, polygone_homogeneous)
-    
+    utils.draw_polygone_tasks_1_6(polygone, utils.homogeneous2standard(polygone_scaled_rotated), "task002_image_01")
 

@@ -12,3 +12,4 @@ if __name__ == '__main__':
     polygone_scaled = utils.apply_transformation_matrix(scale, polygone_homogeneous)
     TS = scale @ translation
     polygone_translated_scaled = utils.apply_transformation_matrix(TS, polygone_homogeneous)
+    utils.draw_polygone_tasks_1_6(polygone, utils.homogeneous2standard(polygone_translated_scaled), "task005_image_01")

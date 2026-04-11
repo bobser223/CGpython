@@ -1,45 +1,27 @@
 import numpy as np
-
-
-def get_transformation_matrix(a: float, b: float) -> np.ndarray:
-    translate_to_origin = np.array(
-        [
-            [1.0, 0.0, -a],
-            [0.0, 1.0, -b],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-    scale = np.array(
-        [
-            [2.0, 0.0, 0.0],
-            [0.0, 3.0, 0.0],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-    translate_back = np.array(
-        [
-            [1.0, 0.0, a],
-            [0.0, 1.0, b],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-    return translate_back @ scale @ translate_to_origin
+import utils
 
 
 if __name__ == "__main__":
-    polygone_coordinates = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
-    polygone_homogenous_coordinates = np.array(
+    polygone = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
+    polygone_homogenous = np.array(
         [[0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]]
     )
 
     pivots = np.array([[0.5, 0.5], [0, 1], [1, 1], [2, 2]])
-    transformation_matrices = []
-    for pivot in pivots:
-        transformation_matrices.append(get_transformation_matrix(pivot[0], pivot[1]))
-        print(
-            f"transformation Matrix for pivot: {pivot[0], pivot[1]} =\n {transformation_matrices[-1]}"
-        )
-        for i in range(4):
-            print(
-                f"Point {i} = {transformation_matrices[-1] @ polygone_homogenous_coordinates[i]}"
-            )
+    scale = utils.get_scale_matrix(2, 3)
+
+    R_1 = utils.transformation_relative_to_pivot(scale, pivots[0])
+    R_2 = utils.transformation_relative_to_pivot(scale, pivots[1])
+    R_3 = utils.transformation_relative_to_pivot(scale, pivots[2])
+    R_4 = utils.transformation_relative_to_pivot(scale, pivots[3])
+
+    polygone_scaled_1 = utils.apply_transformation_matrix(R_1, polygone_homogenous)
+    polygone_scaled_2 = utils.apply_transformation_matrix(R_2, polygone_homogenous)
+    polygone_scaled_3 = utils.apply_transformation_matrix(R_3, polygone_homogenous)
+    polygone_scaled_4 = utils.apply_transformation_matrix(R_4, polygone_homogenous)
+
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_1), pivots[0], "task008_image_01")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_2), pivots[1], "task008_image_02")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_3), pivots[2], "task008_image_03")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_4), pivots[3], "task008_image_04")

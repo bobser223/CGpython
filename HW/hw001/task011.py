@@ -20,8 +20,10 @@ if __name__ == '__main__':
     rev_TRS = rev_scale @ rev_rotation @ rev_translation
     poligon_homogeneous_rev = utils.apply_transformation_matrix(rev_TRS, poligon_homogeneous)
 
-    polygon_local = utils.homogeneous2standard(poligon_homogeneous_rev)
-    print(polygon_local)
+    poligon_local = utils.homogeneous2standard(poligon_homogeneous_rev)
+    print(poligon_local)
+
+    utils.draw_polygone_tasks_1_6(poligon_local, poligon, "task011_image_01", (-2,-2, 6, 7))
 
 
 

@@ -22,3 +22,9 @@ if __name__ == '__main__':
     polygone_scaled_rotated = utils.apply_transformation_matrix(SR, polygone_homogeneous)
     TS = scale @ translation
     polygone_translated_scaled = utils.apply_transformation_matrix(TS, polygone_homogeneous)
+
+    utils.draw_polygone_tasks_1_6(polygone, utils.homogeneous2standard(polygone_SRT), "task006_image_01", (-1, -0, 6, 6))
+    utils.draw_polygone_tasks_1_6(polygone, utils.homogeneous2standard(polygone_TSR), "task006_image_02", (-10, -2, 2, 10))
+
+
+

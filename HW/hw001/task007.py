@@ -1,46 +1,27 @@
 import numpy as np
-
-
-def get_transformation_matrix(a: float, b: float) -> np.ndarray:
-    # a, b are coordinates of the pivot point
-
-    translate_to_origin = np.array(
-        [
-            [1.0, 0.0, -a],
-            [0.0, 1.0, -b],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-
-    cos_60 = np.cos(np.deg2rad(60))
-    sin_60 = np.sin(np.deg2rad(60))
-    rotation = np.array([[cos_60, -sin_60, 0.0], [sin_60, cos_60, 0.0], [0.0, 0.0, 1]])
-
-    translate_back = np.array(
-        [
-            [1.0, 0.0, a],
-            [0.0, 1.0, b],
-            [0.0, 0.0, 1.0],
-        ]
-    )
-
-    return translate_back @ rotation @ translate_to_origin
+import utils
 
 
 if __name__ == "__main__":
-    polygoneCoordinates = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
-    polygone_homogenous_coordinates = np.array(
+    polygone = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
+    polygone_homogenous = np.array(
         [[0, 0, 1], [1, 0, 1], [1, 1, 1], [0, 1, 1]]
     )
 
     pivots = np.array([[0.5, 0.5], [0, 1], [1, 1], [2, 2]])
-    transformationMatrices = []
-    for pivot in pivots:
-        transformationMatrices.append(get_transformation_matrix(pivot[0], pivot[1]))
-        print(
-            f"transformation Matrix for pivot: {pivot[0], pivot[1]} =\n {transformationMatrices[-1]}"
-        )
-        for i in range(4):
-            print(
-                f"Point {i} = {transformationMatrices[-1] @ polygone_homogenous_coordinates[i]}"
-            )
+    rotation = utils.get_rotation_matrix(60)
+
+    R_1 = utils.transformation_relative_to_pivot(rotation, pivots[0])
+    R_2 = utils.transformation_relative_to_pivot(rotation, pivots[1])
+    R_3 = utils.transformation_relative_to_pivot(rotation, pivots[2])
+    R_4 = utils.transformation_relative_to_pivot(rotation, pivots[3])
+
+    polygone_rotated_1 = utils.apply_transformation_matrix(R_1, polygone_homogenous)
+    polygone_rotated_2 = utils.apply_transformation_matrix(R_2, polygone_homogenous)
+    polygone_rotated_3 = utils.apply_transformation_matrix(R_3, polygone_homogenous)
+    polygone_rotated_4 = utils.apply_transformation_matrix(R_4, polygone_homogenous)
+
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_1),pivots[0] ,"task007_image_01")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_2),pivots[1] ,"task007_image_02")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_3),pivots[2] ,"task007_image_03")
+    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_4),pivots[3] ,"task007_image_04")
