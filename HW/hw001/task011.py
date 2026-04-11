@@ -23,7 +23,7 @@ if __name__ == '__main__':
     poligon_local = utils.homogeneous2standard(poligon_homogeneous_rev)
     print(poligon_local)
 
-    utils.draw_polygone_tasks_1_6(poligon_local, poligon, "task011_image_01", (-2,-2, 6, 7))
+    utils.draw_polygone_no_pivot(poligon_local, poligon, "task011_image_01", (-2, -2, 6, 7))
 
 
 

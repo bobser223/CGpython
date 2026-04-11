@@ -163,7 +163,7 @@ def print_matrices(
         name = names[i] if names is not None else f"M{i + 1}"
         print_matrix(name, matrix, precision)
 
-def draw_polygone_tasks_1_6(square, transformed_square, output_name, coordinate_rect_=(-5, -5, 5, 5)):
+def draw_polygone_no_pivot(square, transformed_square, output_name, coordinate_rect_=(-5, -5, 5, 5)):
     output_name += ".png"
 
     scene = Scene(
@@ -204,7 +204,7 @@ def draw_polygone_tasks_1_6(square, transformed_square, output_name, coordinate_
 
     scene.show(output_file=output_name)
 
-def draw_polygone_tasks_7_10(square, transformed_square,pivot = [0,0], output_name="", coordinate_rect_=(-5, -5, 5, 5)):
+def draw_polygone_with_pivot(square, transformed_square, pivot = [0, 0], output_name="", coordinate_rect_=(-5, -5, 5, 5)):
     output_name += ".png"
 
     scene = Scene(

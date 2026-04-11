@@ -18,7 +18,7 @@ if __name__ == '__main__':
     poligon_transformed= utils.apply_transformation_matrix(TRS, poligon_homogeneous)
     print(poligon_transformed)
 
-    utils.draw_polygone_tasks_1_6(poligon, utils.homogeneous2standard(poligon_transformed), "task013_image_01", )
+    utils.draw_polygone_no_pivot(poligon, utils.homogeneous2standard(poligon_transformed), "task013_image_01", )
 
 
     # print(polygon_local)

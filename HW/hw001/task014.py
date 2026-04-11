@@ -26,8 +26,8 @@ if __name__ == '__main__':
     poligon = np.array([[0, 0], [1, 0], [1, 1], [0, 1]])
     poligon_homogeneous = utils.standard2homogeneous(poligon)
 
-    utils.draw_polygone_tasks_1_6(poligon,
-    utils.homogeneous2standard(utils.apply_transformation_matrix(TRS, poligon_homogeneous))
-    , "task014_image_01", (-1,-6, 8, 2))
+    utils.draw_polygone_no_pivot(poligon,
+                                 utils.homogeneous2standard(utils.apply_transformation_matrix(TRS, poligon_homogeneous))
+                                 , "task014_image_01", (-1,-6, 8, 2))
 
 

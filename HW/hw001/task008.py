@@ -21,7 +21,7 @@ if __name__ == "__main__":
     polygone_scaled_3 = utils.apply_transformation_matrix(R_3, polygone_homogenous)
     polygone_scaled_4 = utils.apply_transformation_matrix(R_4, polygone_homogenous)
 
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_1), pivots[0], "task008_image_01")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_2), pivots[1], "task008_image_02")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_3), pivots[2], "task008_image_03")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_scaled_4), pivots[3], "task008_image_04")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_scaled_1), pivots[0], "task008_image_01")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_scaled_2), pivots[1], "task008_image_02")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_scaled_3), pivots[2], "task008_image_03")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_scaled_4), pivots[3], "task008_image_04")

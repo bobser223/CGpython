@@ -21,7 +21,7 @@ if __name__ == "__main__":
     polygone_rotated_3 = utils.apply_transformation_matrix(R_3, polygone_homogenous)
     polygone_rotated_4 = utils.apply_transformation_matrix(R_4, polygone_homogenous)
 
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_1),pivots[0] ,"task007_image_01")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_2),pivots[1] ,"task007_image_02")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_3),pivots[2] ,"task007_image_03")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_rotated_4),pivots[3] ,"task007_image_04")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_rotated_1), pivots[0], "task007_image_01")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_rotated_2), pivots[1], "task007_image_02")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_rotated_3), pivots[2], "task007_image_03")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_rotated_4), pivots[3], "task007_image_04")

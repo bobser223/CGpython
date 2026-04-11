@@ -18,6 +18,6 @@ if __name__ == "__main__":
 
     polygone_ST = utils.apply_transformation_matrix(ST, polygone_homogenous)
     polygone_TS = utils.apply_transformation_matrix(TS, polygone_homogenous)
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_ST),pivot, "task009_image_01")
-    utils.draw_polygone_tasks_7_10(polygone, utils.homogeneous2standard(polygone_TS),pivot, "task009_image_02", (-1, -4, 8, 4))
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_ST), pivot, "task009_image_01")
+    utils.draw_polygone_with_pivot(polygone, utils.homogeneous2standard(polygone_TS), pivot, "task009_image_02", (-1, -4, 8, 4))
 

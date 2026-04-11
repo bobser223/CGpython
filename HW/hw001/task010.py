@@ -24,9 +24,9 @@ if __name__ == "__main__":
     for matrix in [scale_rotation_translation, translation_scale_rotation, scale_translation_rotation]:
         new_polygons.append(utils.apply_transformation_matrix(matrix, polygone_homogenous_coordinates))
 
-    utils.draw_polygone_tasks_7_10(polygone_coordinates, utils.homogeneous2standard(new_polygons[0]),pivot, "task010_image_01")
-    utils.draw_polygone_tasks_7_10(polygone_coordinates, utils.homogeneous2standard(new_polygons[1]),pivot, "task010_image_02")
-    utils.draw_polygone_tasks_7_10(polygone_coordinates, utils.homogeneous2standard(new_polygons[2]),pivot, "task010_image_03")
+    utils.draw_polygone_with_pivot(polygone_coordinates, utils.homogeneous2standard(new_polygons[0]), pivot, "task010_image_01")
+    utils.draw_polygone_with_pivot(polygone_coordinates, utils.homogeneous2standard(new_polygons[1]), pivot, "task010_image_02")
+    utils.draw_polygone_with_pivot(polygone_coordinates, utils.homogeneous2standard(new_polygons[2]), pivot, "task010_image_03")
 
 
 

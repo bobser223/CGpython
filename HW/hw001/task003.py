@@ -13,4 +13,4 @@ if __name__ == '__main__':
 
     RT = translation @ rotation
     polygone_rotated_translated = utils.apply_transformation_matrix(RT, polygone_homogeneous)
-    utils.draw_polygone_tasks_1_6(polygone, utils.homogeneous2standard(polygone_rotated_translated), "task003_image_01")
+    utils.draw_polygone_no_pivot(polygone, utils.homogeneous2standard(polygone_rotated_translated), "task003_image_01")
