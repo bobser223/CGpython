@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
 
     # translation, rotation , scale = utils.TRS_decomposition(TRS) # not a rotation matrix
-    #/HW/hw001/utils.py", line 81, in TRS_decomposition
+    #/HW/hw001/utils002.py", line 81, in TRS_decomposition
     #raise ValueError("This matrix cannot be decomposed into pure T, R, S with diagonal scale.")
     #ValueError: This matrix cannot be decomposed into pure T, R, S with diagonal scale.
 
