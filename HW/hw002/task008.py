@@ -15,7 +15,20 @@ if __name__ == '__main__':
     T = utils.get_translation_matrix(0.0, -3.0, 2.0)
 
     triangle_R = utils.apply_transformation_matrix(R, triangle_homogeneous)
-    triangle_T = utils.apply_transformation_matrix(T, triangle_homogeneous)
-
     RT = T@R
     triangle_RT = utils.apply_transformation_matrix(RT, triangle_homogeneous)
+
+    utils.print_step_sequence(
+        triangle,
+        [triangle_R, triangle_RT],
+        [R, RT],
+        ["After off-origin axis rotation", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=triangle,
+        transformation_matrix=RT,
+        title="Task 008",
+        pivot=[2, 3, 4],
+        show_pivot=True,
+    )

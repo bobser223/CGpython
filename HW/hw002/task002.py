@@ -21,16 +21,22 @@ if __name__ == '__main__':
     translation = utils.get_translation_matrix(-3, 2, 5)
 
     cube_S = utils.apply_transformation_matrix(scale, cube_homogenous)
-    cube_R = utils.apply_transformation_matrix(rotation, cube_homogenous)
-    cube_T = utils.apply_transformation_matrix(translation, cube_homogenous)
+    SR = rotation @ scale
+    STR = translation @ rotation @ scale
 
-    ST = translation@scale
-    SR = rotation@scale
-    RT = translation@rotation
-    STR = rotation@translation@scale
-    TRS = scale@rotation@translation
-    RTS = scale@translation@rotation
-
-    cube_ST = utils.apply_transformation_matrix(ST, cube_homogenous)
+    cube_SR = utils.apply_transformation_matrix(SR, cube_homogenous)
     cube_STR = utils.apply_transformation_matrix(STR, cube_homogenous)
 
+    utils.print_step_sequence(
+        cube,
+        [cube_S, cube_SR, cube_STR],
+        [scale, SR, STR],
+        ["After scale", "After scale + Euler rotation", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=cube,
+        transformation_matrix=STR,
+        faces=utils.get_cube_faces(),
+        title="Task 002",
+    )

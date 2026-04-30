@@ -21,8 +21,21 @@ if __name__ == '__main__':
     R = utils.transformation_relative_to_pivot(R, np.array([1,2, 3]))
 
     cube_S = utils.apply_transformation_matrix(S, cube_homogenous)
-    cube_R = utils.apply_transformation_matrix(R, cube_homogenous)
-
-
     SR = R@S
     cube_SR = utils.apply_transformation_matrix(SR, cube_homogenous)
+
+    utils.print_step_sequence(
+        cube,
+        [cube_S, cube_SR],
+        [S, SR],
+        ["After pivot scale", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=cube,
+        transformation_matrix=SR,
+        faces=utils.get_cube_faces(),
+        title="Task 007",
+        pivot=[1, 2, 3],
+        show_pivot=True,
+    )

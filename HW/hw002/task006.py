@@ -21,12 +21,21 @@ if __name__ == '__main__':
     T = utils.get_translation_matrix(-1, 2, 4)
 
     cube_R = utils.apply_transformation_matrix(R, cube_homogenous)
-    cube_T = utils.apply_transformation_matrix(T, cube_homogenous)
-
     RT = T@R
     cube_RT = utils.apply_transformation_matrix(RT, cube_homogenous)
 
-    print(
-        "Cube after applying rotation and translation:\n",
-        cube_RT
+    utils.print_step_sequence(
+        cube,
+        [cube_R, cube_RT],
+        [R, RT],
+        ["After pivot rotation", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=cube,
+        transformation_matrix=RT,
+        faces=utils.get_cube_faces(),
+        title="Task 006",
+        pivot=[2, 0, 3],
+        show_pivot=True,
     )

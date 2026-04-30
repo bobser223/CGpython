@@ -22,12 +22,26 @@ if __name__ == '__main__':
     R = utils.transformation_relative_to_pivot(R, [1,1,1])
     T = utils.get_translation_matrix(-3, 4, 2)
 
-    cube_S = utils.apply_transformation_matrix(cube, S)
+    cube_S = utils.apply_transformation_matrix(S, cube_homogenous)
 
     SR = R @ S
-    cube_SR = utils.apply_transformation_matrix(cube, SR)
+    cube_SR = utils.apply_transformation_matrix(SR, cube_homogenous)
 
     SRT = T@R@S
-    cube_SRT = utils.apply_transformation_matrix(cube, SRT)
+    cube_SRT = utils.apply_transformation_matrix(SRT, cube_homogenous)
 
-    
+    utils.print_step_sequence(
+        cube,
+        [cube_S, cube_SR, cube_SRT],
+        [S, SR, SRT],
+        ["After pivot X scale", "After pivot Y rotation", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=cube,
+        transformation_matrix=SRT,
+        faces=utils.get_cube_faces(),
+        title="Task 010",
+        pivot=[1, 1, 1],
+        show_pivot=True,
+    )

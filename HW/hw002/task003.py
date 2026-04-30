@@ -26,4 +26,16 @@ if __name__ == '__main__':
     R1R2T = T@R2@R1
     cube_R1R2T = utils.apply_transformation_matrix(R1R2T, cube_homogenous)
 
-    
+    utils.print_step_sequence(
+        cube,
+        [utils.apply_transformation_matrix(R1, cube_homogenous), cube_R1R2, cube_R1R2T],
+        [R1, R1R2, R1R2T],
+        ["After Z rotation", "After arbitrary-axis rotation", "Final state"],
+    )
+
+    utils.save_task_visualization(
+        initial_vertices=cube,
+        transformation_matrix=R1R2T,
+        faces=utils.get_cube_faces(),
+        title="Task 003",
+    )
