@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 import math as m
 import os.path
+import matplotlib.pyplot as plt
 
 os.environ.setdefault("GRAPHIC_ENGINE_MPL_BACKEND", "Agg")
 
@@ -12,7 +13,9 @@ ENGINE_ROOT = Path(__file__).resolve().parents[2] / "GraphicEngine2D"
 if str(ENGINE_ROOT) not in sys.path:
     sys.path.append(str(ENGINE_ROOT))
 
+from src.base.axes import draw_axis
 from src.base.broken_line import draw_broken_line
+from src.base.points import draw_point
 from src.base.poligon import draw_poly
 from src.engine.model.Model import Model
 from src.engine.scene.Scene import Scene
@@ -53,13 +56,77 @@ class MeshModel(Model):
                 edgecolor=self.edge_color,
                 facecolor=self.color,
             )
-            draw_broken_line(
-                plt_axis,
-                face_points + [face_points[0]],
-                color=self.edge_color,
-                linewidth=self.line_width,
-                linestyle=self.line_style,
-            )
+
+
+class PolylineModel(Model):
+    def __init__(
+        self,
+        vertices,
+        color: str = "black",
+        line_style: str = "-",
+        line_width: float = 1.2,
+        vertices_show: bool = True,
+        vertex_color: str = "black",
+        vertex_size: float = 35.0,
+    ):
+        vertices = np.asarray(vertices, dtype=float)
+        super().__init__(*vertices)
+        self.color = color
+        self.line_style = line_style
+        self.line_width = line_width
+        self.vertices_show = vertices_show
+        self.vertex_color = vertex_color
+        self.vertex_size = vertex_size
+
+    def draw_model(self, plt_axis):
+        points = [vertex.xyz for vertex in self.transformed_geometry]
+        draw_broken_line(
+            plt_axis,
+            points,
+            color=self.color,
+            linewidth=self.line_width,
+            linestyle=self.line_style,
+        )
+        if self.vertices_show:
+            for point in points:
+                draw_point(
+                    plt_axis,
+                    point,
+                    size=self.vertex_size,
+                    color=self.vertex_color,
+                )
+
+
+class ArrowModel(Model):
+    def __init__(
+        self,
+        start,
+        end,
+        color: str = "black",
+        line_style: str = "-",
+        line_width: float = 1.2,
+        label: str = "",
+    ):
+        start = tuple(np.asarray(start, dtype=float))
+        end = tuple(np.asarray(end, dtype=float))
+        super().__init__(start, end)
+        self.color = color
+        self.line_style = line_style
+        self.line_width = line_width
+        self.label = label
+
+    def draw_model(self, plt_axis):
+        start, end = [vertex.xyz for vertex in self.transformed_geometry]
+        draw_axis(
+            plt_axis,
+            start,
+            end,
+            color=self.color,
+            linewidth=self.line_width,
+            linestyle=self.line_style,
+        )
+        if self.label:
+            draw_point(plt_axis, end, size=20, color=self.color)
 
 
 def transformation_relative_to_pivot(transformation_matrix: np.ndarray, pivot: np.ndarray) -> np.ndarray:
@@ -399,6 +466,19 @@ def get_tetrahedron_faces() -> list[tuple[int, ...]]:
     ]
 
 
+def get_cube_vertices() -> np.ndarray:
+    return np.array([
+        [0.0, 0.0, 0.0],
+        [1.0, 0.0, 0.0],
+        [1.0, 1.0, 0.0],
+        [0.0, 1.0, 0.0],
+        [0.0, 0.0, 1.0],
+        [1.0, 0.0, 1.0],
+        [1.0, 1.0, 1.0],
+        [0.0, 1.0, 1.0],
+    ])
+
+
 def infer_faces_from_vertices(vertices) -> list[tuple[int, ...]]:
     vertices = _normalize_points(vertices)
     points_count = len(vertices)
@@ -605,6 +685,147 @@ def save_task_visualization(
     )
 
 
+def visualize_multiple_objects_3d(
+    objects: list[dict],
+    title: str = "3D comparison",
+    coordinate_rect: tuple[float, float, float, float, float, float] | None = None,
+    output_path: str | None = None,
+    show: bool = False,
+):
+    if not objects:
+        raise ValueError("objects must contain at least one item")
+
+    all_points = []
+    prepared = []
+
+    for item in objects:
+        vertices = _normalize_points(item["vertices"])
+        transformation_matrix = item.get("transformation_matrix")
+        if transformation_matrix is not None:
+            transformed = homogeneous2standard(
+                apply_transformation_matrix(
+                    transformation_matrix,
+                    standard2homogeneous(vertices),
+                )
+            )
+            all_points.extend([vertices, transformed])
+        else:
+            all_points.append(vertices)
+
+        prepared.append((vertices, item))
+
+    if coordinate_rect is None:
+        coordinate_rect = get_coordinate_rect(*all_points)
+
+    scene = Scene(
+        coordinate_rect=coordinate_rect,
+        title=title,
+        grid_show=True,
+        base_axis_show=False,
+        axis_show=True,
+    )
+
+    for index, (vertices, item) in enumerate(prepared):
+        faces = item.get("faces")
+        if faces is None:
+            faces = infer_faces_from_vertices(vertices)
+
+        model = MeshModel(
+            vertices,
+            faces,
+            color=item.get("color", "grey"),
+            edge_color=item.get("edge_color", "black"),
+            line_style=item.get("line_style", "-"),
+            line_width=item.get("line_width", 1.1),
+            alpha=item.get("alpha", 0.14),
+        )
+        pivot = item.get("pivot")
+        if pivot is not None:
+            model.pivot(*pivot)
+        if item.get("show_pivot", False):
+            model.show_pivot()
+        if item.get("show_local_frame", False):
+            model.show_local_frame()
+        transformation_matrix = item.get("transformation_matrix")
+        if transformation_matrix is not None:
+            model.transformation = to_engine_matrix(transformation_matrix)
+
+        scene[f"object_{index}"] = model
+
+    return render_scene(scene, output_path=output_path, show=show)
+
+
+def save_task_multiple_visualization(
+    objects: list[dict],
+    image_index: int = 1,
+    title: str | None = None,
+    coordinate_rect: tuple[float, float, float, float, float, float] | None = None,
+    show: bool = False,
+):
+    output_path = get_task_output_path(image_index=image_index)
+    if title is None:
+        title = Path(output_path).stem
+
+    return visualize_multiple_objects_3d(
+        objects=objects,
+        title=title,
+        coordinate_rect=coordinate_rect,
+        output_path=output_path,
+        show=show,
+    )
+
+
+def save_task_trajectory_visualization(
+    trajectory_points,
+    arrows: list[dict] | None = None,
+    image_index: int = 1,
+    title: str | None = None,
+    coordinate_rect: tuple[float, float, float, float, float, float] | None = None,
+    show: bool = False,
+):
+    trajectory_points = _normalize_points(trajectory_points)
+    output_path = get_task_output_path(image_index=image_index)
+    if title is None:
+        title = Path(output_path).stem
+
+    point_sets = [trajectory_points]
+    if arrows:
+        for arrow in arrows:
+            point_sets.append(_normalize_points([arrow["start"], arrow["end"]]))
+
+    if coordinate_rect is None:
+        coordinate_rect = get_coordinate_rect(*point_sets)
+
+    scene = Scene(
+        coordinate_rect=coordinate_rect,
+        title=title,
+        grid_show=True,
+        base_axis_show=False,
+        axis_show=True,
+    )
+
+    scene["trajectory"] = PolylineModel(
+        trajectory_points,
+        color="darkorange",
+        line_style="-",
+        line_width=1.5,
+        vertices_show=True,
+        vertex_color="darkred",
+    )
+
+    for index, arrow in enumerate(arrows or []):
+        scene[f"arrow_{index}"] = ArrowModel(
+            arrow["start"],
+            arrow["end"],
+            color=arrow.get("color", "royalblue"),
+            line_style=arrow.get("line_style", "-"),
+            line_width=arrow.get("line_width", 1.1),
+            label=arrow.get("label", ""),
+        )
+
+    return render_scene(scene, output_path=output_path, show=show)
+
+
 def print_points(
     name: str,
     points,
@@ -792,3 +1013,19 @@ def print_decomposition_report(
             angle_degrees=angle_degrees,
             precision=precision,
         )
+
+
+def print_angle_sequence(name: str, angle_sets, precision: int = 3) -> None:
+    print(f"{name}:")
+    for index, angles in enumerate(angle_sets):
+        ax, ay, az = angles
+        print(
+            f"  step {index + 1}: "
+            f"({ax:.{precision}f}, {ay:.{precision}f}, {az:.{precision}f})"
+        )
+    print()
+
+
+def transform_direction(matrix: np.ndarray, vector) -> np.ndarray:
+    vector_h = np.asarray([vector[0], vector[1], vector[2], 0.0], dtype=float)
+    return (matrix @ vector_h)[:3]
