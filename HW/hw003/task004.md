@@ -127,8 +127,7 @@ $$\sin(\alpha - \gamma)= \sin\alpha\cos\gamma - \cos\alpha\sin\gamma$$
 $$\cos(\alpha - \gamma)
 =\cos\alpha\cos\gamma + \sin\alpha\sin\gamma$$
 
-$$R =
-\begin{pmatrix}
+$$R = \begin{pmatrix}
 0
 &
 \sin(\alpha - \gamma)
